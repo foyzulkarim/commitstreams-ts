@@ -4,7 +4,10 @@ import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import { AddressInfo } from 'net';
 
-const createFastifyApp = (): FastifyInstance => {
+import { defineRoutes } from './app';
+import { AppDataSource } from './libraries/db';
+
+const createFastifyApp = async (): Promise<FastifyInstance> => {
   const fastifyApp: FastifyInstance = fastify({ logger: true });
   fastifyApp.register(helmet);
   fastifyApp.register(require('@fastify/formbody'));
@@ -13,6 +16,8 @@ const createFastifyApp = (): FastifyInstance => {
     origin: 'http://localhost:3000',
     credentials: true,
   });
+
+  await defineRoutes(fastifyApp);
 
   // Add the /api/ping route
   fastifyApp.get('/api/ping', (request, reply) => {
@@ -32,9 +37,8 @@ const openConnection = (
   fastifyApp: FastifyInstance
 ): Promise<{ address: string; port: number }> => {
   return new Promise((resolve) => {
-    const webServerPort = 3000;
+    const webServerPort = 4000;
     console.log(`Server is about to listen to port ${webServerPort}`);
-
     fastifyApp.listen({ port: webServerPort }, (err, address) => {
       if (err) {
         throw err;
@@ -48,8 +52,9 @@ const openConnection = (
 
 export const startWebServer = async (): Promise<FastifyInstance> => {
   console.log('Starting web server...');
-  const fastifyApp = createFastifyApp();
+  const fastifyApp = await createFastifyApp();
   const APIAddress = await openConnection(fastifyApp);
+  await AppDataSource.initialize();
   console.log(`Server is running on ${APIAddress.address}:${APIAddress.port}`);
   return fastifyApp;
 };
