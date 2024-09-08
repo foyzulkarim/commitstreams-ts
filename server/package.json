@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/start.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/start.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "@fastify/formbody": "^7.4.0",
     "@fastify/helmet": "^11.1.1",
     "@types/node": "^22.5.4",
+    "@types/sqlite3": "^3.1.11",
     "acorn": "^8.12.1",
     "acorn-walk": "^8.3.3",
     "arg": "^4.1.3",
@@ -31,6 +33,8 @@
     "diff": "^4.0.2",
     "fastify": "^4.28.1",
     "make-error": "^1.3.6",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20",
     "undici-types": "^6.19.8",
     "v8-compile-cache-lib": "^3.0.1",
     "yn": "^3.1.1"
